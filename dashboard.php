@@ -111,7 +111,7 @@ if ($row > 0) {
                     </tr>
                     <tr>
                         <td>OPERATIOS</td>
-                        <td><a href="user_update.php?id=<?php echo $idd; ?>">Edit</a></td>
+                        <td><a class="text-warning" href="user_update.php?id=<?php echo $idd; ?>">Edit</a></td>
                     </tr>
 
 

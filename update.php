@@ -29,13 +29,13 @@ if (isset($_POST['update'])) {
     } elseif ($_POST['age'] < 0) {
         $agerr = "minus value not allow";
     } elseif (preg_match("/[A-Za-z]/", $_POST['age'])) {
-        $agerr = "minus value not allow";
+        $agerr = "alpha value not allow";
     } elseif (empty($_POST['salary'])) {                                //salary
         $err = "value is required";
     } elseif (empty($_POST['hobby'])) {
         $err = "value is required";
     } elseif (preg_match("/[A-Za-z]/", $_POST['salary'])) {
-        $agerr = "alpha value not allow";
+        $salerr = "alpha value not allow";
     } elseif ($_POST['salary'] < 0) {
         $salerr = "minus value not allow";
     } elseif (empty($_POST['email'])) {                                //email
@@ -149,6 +149,7 @@ if (isset($_POST['update'])) {
                     <label>Salary :</label>
                     <input type="text" name="salary" class="form-control" value="<?php echo $data['salary']; ?>">
                     <?php echo "<p class='text-danger'>$err</p>";
+                    echo "<p class='text-danger'>$salerr</p>";
                     ?>
                 </div>
                 <div class="form-group col-md-4">

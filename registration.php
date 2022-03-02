@@ -1,7 +1,7 @@
 <?php
 session_start();
 include "config.php";
-if(isset($_SESSION['id'])){
+if (isset($_SESSION['id'])) {
     header('location:dashboard.php');
 }
 
@@ -22,7 +22,6 @@ if (isset($_POST['submit'])) {
         hobby varchar(60),
         email varchar(20),
         pwd text,
-        confirmpwd text,
         image longblob
     )";
         $tblchk = mysqli_query($conn, $createtbl);
@@ -51,13 +50,13 @@ if (isset($_POST['submit'])) {
     } elseif ($_POST['age'] < 0) {
         $agerr = "minus value not allow";
     } elseif (preg_match("/[A-Za-z]/", $_POST['age'])) {
-        $agerr = "minus value not allow";
+        $agerr = "alpha value not allow";
     } elseif (empty($_POST['salary'])) {                                //salary
         $err = "value is required";
     } elseif (empty($_POST['hobby'])) {
         $err = "value is required";
     } elseif (preg_match("/[A-Za-z]/", $_POST['salary'])) {
-        $agerr = "alpha value not allow";
+        $salerr = "alpha value not allow";
     } elseif ($_POST['salary'] < 0) {
         $salerr = "minus value not allow";
     } elseif (empty($_POST['email'])) {                                //email
@@ -74,7 +73,10 @@ if (isset($_POST['submit'])) {
         $cpasserr = "not same as password";
     } elseif ($filesize > 1000000) {                                           //image
         $imgerr = "imgfile must be less than 1mb";
-    } else {
+    }elseif(empty($filesize)){
+        $imgerr = "imgfile required";
+    }
+     else {
         $fname = $_POST['fname'];
         $lname = $_POST['lname'];
         $doj = $_POST['doj'];
@@ -157,11 +159,13 @@ if (isset($_POST['submit'])) {
             <div class="form-row justify-content-center">
                 <div class="form-group col-md-4"><br>
                     <label>Gender :</label>
-                    <input type="radio" name="gender" value="male" <?php if (isset($_POST['gender'])) {if($_POST['gender']=='male')
-                                                                        echo  'checked';
+                    <input type="radio" name="gender" value="male" <?php if (isset($_POST['gender'])) {
+                                                                        if ($_POST['gender'] == 'male')
+                                                                            echo  'checked';
                                                                     } ?>> Male
-                    <input type="radio" name="gender" value="female" <?php if (isset($_POST['gender'])) {if($_POST['gender']=='female')
-                                                                            echo 'checked';
+                    <input type="radio" name="gender" value="female" <?php if (isset($_POST['gender'])) {
+                                                                            if ($_POST['gender'] == 'female')
+                                                                                echo 'checked';
                                                                         } ?>> Female
                     <?php echo "<p class='text-danger'>$err</p>"; ?>
                 </div>
@@ -181,7 +185,7 @@ if (isset($_POST['submit'])) {
                                                                                 } ?>">
                     <?php echo "<p class='text-danger'>$err</p>";
                     echo "<p class='text-danger'> $agerr</p>"; ?>
-    
+
                 </div>
 
 
@@ -193,22 +197,27 @@ if (isset($_POST['submit'])) {
                                                                                         echo $salary = $_POST['salary'];
                                                                                     } ?>">
                     <?php echo "<p class='text-danger'>$err</p>";
+                    echo "<p class='text-danger'>$salerr</p>";
                     ?>
                 </div>
                 <div class="form-group col-md-4">
                     <label>Department :</label>
                     <select name="dept" class="form-control">
-                        <option value="sale" <?php if (isset($_POST['dept'])) {if($_POST['dept']=='sale')
-                                                    echo 'selected';
+                        <option value="sale" <?php if (isset($_POST['dept'])) {
+                                                    if ($_POST['dept'] == 'sale')
+                                                        echo 'selected';
                                                 } ?>>Sale</option>
-                        <option value="purchase" <?php  if (isset($_POST['dept'])) {if($_POST['dept']=='purchase')
-                                                    echo 'selected';
+                        <option value="purchase" <?php if (isset($_POST['dept'])) {
+                                                        if ($_POST['dept'] == 'purchase')
+                                                            echo 'selected';
                                                     } ?>>Purchase</option>
-                        <option value="red" <?php if (isset($_POST['dept'])) {if($_POST['dept']=='red')
+                        <option value="red" <?php if (isset($_POST['dept'])) {
+                                                if ($_POST['dept'] == 'red')
                                                     echo 'selected';
                                             } ?>>RED</option>
-                        <option value="marketing" <?php if (isset($_POST['dept'])) {if($_POST['dept']=='marketing')
-                                                    echo 'selected';
+                        <option value="marketing" <?php if (isset($_POST['dept'])) {
+                                                        if ($_POST['dept'] == 'marketing')
+                                                            echo 'selected';
                                                     } ?>>Marketing</option>
                     </select>
                     <?php echo "<p class='text-danger'>$err</p>"; ?>
@@ -222,7 +231,7 @@ if (isset($_POST['submit'])) {
                                                                                                         } ?>">
                         <label class="custom-file-label" id="customfile">choose image file</label>
                         <?php echo "<p class='text-danger'>$err</p>";
-                        echo "<p class='text-danger'> $agerr</p>"; ?>
+                        echo "<p class='text-danger'>  $imgerr</p>"; ?>
                     </div>
                 </div>
             </div>
@@ -270,7 +279,7 @@ if (isset($_POST['submit'])) {
                     <input class="form-check-input" type="checkbox" name="hobby[]" value="Singing" <?php if (isset($_POST['hobby']) && in_array('Singing', $_POST['hobby'])) {
                                                                                                         echo 'checked';
                                                                                                     } ?>> Singing
-                    <?php echo "<p class='text-danger'>$err</p>";?>
+                    <?php echo "<p class='text-danger'>$err</p>"; ?>
                 </div>
                 <div class="form-group col-md-4  "><br><br>
                     <input type="submit" value="Submit" name="submit" class="btn btn-info">
