@@ -9,8 +9,29 @@ if (!$_SESSION['admin']) {
 }
 $query = "SELECT * FROM EMPLOYEE1";
 $reslt = mysqli_query($conn, $query);
+$data = mysqli_fetch_assoc($reslt);
+function user_data(){
+    global $data; ?>
+        <tr>
+            <td><?php echo $data['id']; ?></td>
+            <td><?php echo $data['fname']; ?></td>
+            <td><?php echo $data['lname']; ?></td>
+            <td><?php echo $data['doj']; ?></td>
+            <td><?php echo $data['department']; ?></td>
+            <td><?php echo $data['gender']; ?></td>
+            <td><?php echo $data['age']; ?></td>
+            <td><?php echo $data['salary']; ?></td>
+            <td><?php echo $data['hobby']; ?></td>
+            <td><?php echo $data['email']; ?></td>
+            <td><?php echo base64_encode($data['pwd']); ?></td>
+            <td><img src="<?php echo $data['image']; ?>" width="50px"></td>
+            <td><a class="text-warning" href="update.php?id=<?php echo $data['id']; ?>">Edit</a></td>
+            <td><a class="text-danger" href="delete.php?iddel=<?php echo $data['id']; ?>">Delete</a></td>
 
-?>
+        </tr>
+    <?php }?>
+
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -38,7 +59,7 @@ $reslt = mysqli_query($conn, $query);
         </div>
         <div class="p-2"></div>
        
-        <select class="btn btn-warning btn-md dropdown-toggle mr-3">
+        <select class="btn btn-warning btn-md dropdown-toggle mr-3" name="search_column">
             <option  href="#" id="id">ID</option>
             <option  href="#">FNAME</option>
             <option  href="#">LNAME</option>
@@ -51,8 +72,8 @@ $reslt = mysqli_query($conn, $query);
             <option href="#">EMAIL</option>
             <option  href="#">PASSWORD</option>
         </select>
-         <input type="text" class=" text-center mr-3" placeholder="search...">
-        <input type="button" class="btn btn-outline-info btn-sm" value="search">
+         <input type="text" class=" text-center mr-3" placeholder="search..." name="search_value">
+        <button class="btn btn-outline-info btn-lg"  name="submit" type="submit">search</button>
 
     </div>
     <div class="p-2"></div>
@@ -77,25 +98,25 @@ $reslt = mysqli_query($conn, $query);
                 </tr>
             </thead>
             <tbody>
-                <?php while ($data = mysqli_fetch_assoc($reslt)) { ?>
-                    <tr>
-                        <td><?php echo $data['id']; ?></td>
-                        <td><?php echo $data['fname']; ?></td>
-                        <td><?php echo $data['lname']; ?></td>
-                        <td><?php echo $data['doj']; ?></td>
-                        <td><?php echo $data['department']; ?></td>
-                        <td><?php echo $data['gender']; ?></td>
-                        <td><?php echo $data['age']; ?></td>
-                        <td><?php echo $data['salary']; ?></td>
-                        <td><?php echo $data['hobby']; ?></td>
-                        <td><?php echo $data['email']; ?></td>
-                        <td><?php echo base64_encode($data['pwd']); ?></td>
-                        <td><img src="<?php echo $data['image']; ?>" width="50px"></td>
-                        <td><a class="text-warning" href="update.php?id=<?php echo $data['id']; ?>">Edit</a></td>
-                        <td><a class="text-danger" href="delete.php?iddel=<?php echo $data['id']; ?>">Delete</a></td>
-
-                    </tr>
-                <?php } ?>
+              <?php
+                $s_col=$s_val="";
+                if(!isset($_POST["submit"])){
+                    $query = "SELECT * FROM EMPLOYEE1";
+                    $reslt = mysqli_query($conn, $query);
+                    while($data = mysqli_fetch_assoc($reslt)){
+                    user_data();
+                    }
+                    
+                }else{
+                    $s_col=$_POST["search_column"];
+                    $s_val=$_POST['search_value'];
+                    $squery="SELECT * FROM  EMPLOYEE1 WHERE  $s_col like %$s_val%";
+                    $squery_chk=mysqli_query($conn,$squery);
+                    while($data){
+                        user_data();
+                    }
+                }
+              ?>
             </tbody>
         </table>
     </div>
