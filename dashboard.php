@@ -12,6 +12,7 @@ $id = $_SESSION['email'];
 $sql = "SELECT * FROM EMPLOYEE1 where email='$id'";
 $sqlchk = mysqli_query($conn, $sql);
 $row = mysqli_fetch_assoc($sqlchk);
+$idd=$fname=$lname=$email=$pass=$gender=$doj=$department=$hobby=$salary=$age=$img="";
 if ($row > 0) {
     
         $idd = $row['id'];
